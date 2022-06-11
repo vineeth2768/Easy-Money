@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:easy_money/db/category/category_db.dart';
 import 'package:easy_money/model/category/category_model.dart';
+import 'package:easy_money/screens/add_transactions/screen_add_transaction.dart';
 import 'package:easy_money/screens/category/category_add_popup.dart';
 import 'package:easy_money/screens/category/screen_category.dart';
 import 'package:easy_money/screens/home/widgets/bottom_navigation.dart';
@@ -37,6 +38,7 @@ class ScreenHome extends StatelessWidget {
         onPressed: () {
           if (selectedIndexNotifier.value == 0) {
             log("Add Transactions");
+            Navigator.of(context).pushNamed(ScreenAddTransaction.routeName);
           } else {
             log("Add Category");
             showCategoryAddPopup(context);

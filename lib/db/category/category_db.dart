@@ -48,6 +48,7 @@ class CategoryDB implements CategoryDbFunctions {
         expenseCategoryListListener.value.add(category);
       }
     });
+
     icomeCategoryListListener.notifyListeners();
     expenseCategoryListListener.notifyListeners();
   }

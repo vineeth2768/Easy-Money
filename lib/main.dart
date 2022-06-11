@@ -1,5 +1,7 @@
 import 'package:easy_money/model/category/category_model.dart';
+import 'package:easy_money/screens/add_transactions/screen_add_transaction.dart';
 import 'package:easy_money/screens/home/screen_home.dart';
+import 'package:easy_money/screens/transaction/screen_transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -27,6 +29,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const ScreenHome(),
+      routes: {
+        ScreenAddTransaction.routeName: (context) =>
+            const ScreenAddTransaction()
+      },
     );
   }
 }
