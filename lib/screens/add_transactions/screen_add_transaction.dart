@@ -16,6 +16,14 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
   DateTime? _selectedDate;
   CategoryType? _selectCategorytype;
   CategoryModel? _categoryModel;
+  String? _categoryID;
+
+  @override
+  void initState() {
+    _selectCategorytype = CategoryType.income;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,8 +86,13 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
                   children: [
                     Radio(
                       value: CategoryType.income,
-                      groupValue: CategoryType.income,
-                      onChanged: (newValue) {},
+                      groupValue: _selectCategorytype,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectCategorytype = CategoryType.income;
+                          _categoryID = null;
+                        });
+                      },
                     ),
                     const Text("Income")
                   ],
@@ -88,8 +101,13 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
                   children: [
                     Radio(
                         value: CategoryType.expense,
-                        groupValue: CategoryType.expense,
-                        onChanged: (newValue) {}),
+                        groupValue: _selectCategorytype,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectCategorytype = CategoryType.expense;
+                            _categoryID = null;
+                          });
+                        }),
                     const Text("Expense")
                   ],
                 ),
@@ -97,14 +115,24 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
             ),
             // Category DropDown
 
-            DropdownButton(
-                hint: const Text("Select Category"),
-                items: CategoryDB().expenseCategoryListListener.value.map((e) {
-                  return DropdownMenuItem(value: e.id, child: Text(e.name));
-                }).toList(),
-                onChanged: (selectedValue) {
-                  print(selectedValue);
-                }),
+            DropdownButton<String>(
+              hint: const Text("Select Category"),
+              value: _categoryID,
+              items: (_selectCategorytype == CategoryType.income
+                      ? CategoryDB().icomeCategoryListListener
+                      : CategoryDB().expenseCategoryListListener)
+                  .value
+                  .map((e) {
+                return DropdownMenuItem(value: e.id, child: Text(e.name));
+              }).toList(),
+              onChanged: (selectedValue) {
+                print(selectedValue);
+                setState(() {
+                  _categoryID = selectedValue;
+                });
+              },
+              onTap: () {},
+            ),
             ElevatedButton(onPressed: () {}, child: const Text("Submit"))
           ],
         ),
