@@ -1,7 +1,10 @@
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:easy_money/db/category/category_db.dart';
+import 'package:easy_money/db/transactions/transaction_db.dart';
 import 'package:easy_money/model/category/category_model.dart';
+import 'package:easy_money/model/transactions/tranasaction_model.dart';
 import 'package:flutter/material.dart';
 
 class ScreenAddTransaction extends StatefulWidget {
@@ -15,8 +18,10 @@ class ScreenAddTransaction extends StatefulWidget {
 class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
   DateTime? _selectedDate;
   CategoryType? _selectCategorytype;
-  CategoryModel? _categoryModel;
+  CategoryModel? _selectedCategoryModel;
   String? _categoryID;
+  final _purposeTextEdingController = TextEditingController();
+  final _amountTextEdingController = TextEditingController();
 
   @override
   void initState() {
@@ -37,6 +42,7 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
           children: [
             ///Purpose TextField
             TextFormField(
+              controller: _purposeTextEdingController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: "Purpose",
@@ -46,6 +52,7 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
 
             ///Amount
             TextFormField(
+              controller: _amountTextEdingController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: "Amount",
@@ -123,7 +130,13 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
                       : CategoryDB().expenseCategoryListListener)
                   .value
                   .map((e) {
-                return DropdownMenuItem(value: e.id, child: Text(e.name));
+                return DropdownMenuItem(
+                  value: e.id,
+                  child: Text(e.name),
+                  onTap: () {
+                    _selectedCategoryModel = e;
+                  },
+                );
               }).toList(),
               onChanged: (selectedValue) {
                 print(selectedValue);
@@ -133,10 +146,48 @@ class _ScreenAddTransactionState extends State<ScreenAddTransaction> {
               },
               onTap: () {},
             ),
-            ElevatedButton(onPressed: () {}, child: const Text("Submit"))
+            ElevatedButton(
+                onPressed: () {
+                  addTransaction();
+                },
+                child: const Text("Submit"))
           ],
         ),
       )),
     );
+  }
+
+  Future<void> addTransaction() async {
+    final _purposText = _purposeTextEdingController.text;
+    final _amountText = _amountTextEdingController.text;
+    if (_purposText.isEmpty) {
+      return;
+    }
+    if (_amountText.isEmpty) {
+      return;
+    }
+    // if (_categoryID == null) {
+    //   return;
+    // }
+    if (_selectedDate == null) {
+      return;
+    }
+    if (_selectedCategoryModel == null) {
+      return;
+    }
+    final _paresdAmount = double.tryParse(_amountText);
+    if (_paresdAmount == null) {
+      return;
+    }
+    final _model = TransactionModel(
+      purpose: _purposText,
+      amount: _paresdAmount,
+      date: _selectedDate!,
+      type: _selectCategorytype!,
+      category: _selectedCategoryModel!,
+    );
+    await TransactionDb.instance.addTransaction(_model);
+    Navigator.of(context).pop();
+    TransactionDb.instance.refresh();
   }
 }

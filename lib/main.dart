@@ -1,7 +1,7 @@
 import 'package:easy_money/model/category/category_model.dart';
+import 'package:easy_money/model/transactions/tranasaction_model.dart';
 import 'package:easy_money/screens/add_transactions/screen_add_transaction.dart';
 import 'package:easy_money/screens/home/screen_home.dart';
-import 'package:easy_money/screens/transaction/screen_transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -15,6 +15,10 @@ Future<void> main() async {
   if (!Hive.isAdapterRegistered(CategoryModelAdapter().typeId)) {
     Hive.registerAdapter(CategoryModelAdapter());
   }
+  if (!Hive.isAdapterRegistered(TransactionModelAdapter().typeId)) {
+    Hive.registerAdapter(TransactionModelAdapter());
+  }
+
   runApp(const MyApp());
 }
 
