@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:easy_money/db/category/category_db.dart';
 import 'package:easy_money/db/transactions/transaction_db.dart';
