@@ -2,6 +2,7 @@ import 'package:easy_money/model/category/category_model.dart';
 import 'package:easy_money/model/transactions/tranasaction_model.dart';
 import 'package:easy_money/screens/add_transactions/screen_add_transaction.dart';
 import 'package:easy_money/screens/home/screen_home.dart';
+import 'package:easy_money/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.indigo),
-      home: const ScreenHome(),
+      home: const SplashScreen(),
       routes: {
         ScreenAddTransaction.routeName: (context) =>
             const ScreenAddTransaction()
